@@ -1,0 +1,73 @@
+Public Class Form1
+
+    Dim position As Integer = 0
+    ''' <summary>
+    ''' Button Lade lädt den Text aus der angegebenen Textdatei in die Textbox
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub BtnLoad_Click(sender As Object, e As EventArgs) Handles BtnLoad.Click
+
+        Dim text As String = TxtBoxBig.Text
+
+        TxtBoxBig.Text = My.Computer.FileSystem.ReadAllText("c:\temp\dateiload.txt")
+
+    End Sub
+
+
+    ''' <summary>
+    ''' Button Suche sucht das Suchwort in der TextboxBig
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub BtnSearch_Click(sender As Object, e As EventArgs) Handles BtnSearch.Click
+
+        Dim suchwort As String = txtboxsuche.Text                           'Wort das in Text gesucht werden soll
+        Dim suchstart As Integer = 0
+        Dim anzahl As Integer = 0
+
+
+        'Do
+        Try
+
+                position = TxtBoxBig.Text.IndexOf(suchwort, suchstart)
+                suchstart = position + 1
+                For i = 0 To suchstart 'immer die Position merken an der man zuletzt war
+                    TxtBoxBig.Focus()                                               'setzt Focus in die Textbox
+                    TxtBoxBig.SelectionStart = TxtBoxBig.Text.IndexOf(suchwort, i)     'textbox - auswahl start gleich text der textbox 
+                    TxtBoxBig.SelectionLength = suchwort.Length
+                Next i
+
+                If position = -1 Then
+                    Return
+                Else
+                    anzahl += 1
+                End If
+
+
+            lblAnzeige.Text = "Häufigkeit des gesuchten Wortes:" & anzahl & "Position: " & position
+        Catch ex As Exception
+                MsgBox("nicht gefunden")
+            End Try
+        'Loop
+
+    End Sub
+
+    Private Sub BtnWeiter_Click(sender As Object, e As EventArgs) Handles BtnWeiter.Click
+
+        Dim suchwort As String = txtboxsuche.Text
+        Dim endeErstesWort As Integer
+
+        position = TxtBoxBig.Text.IndexOf(suchwort)            'gibt die Stelle an, nach der das Wort kommt    z.B. 0
+        endeErstesWort = position + suchwort.Length            'gibt letzte Stelle an, ab der weitergesucht werden soll
+        TxtBoxBig.Focus()
+        TxtBoxBig.SelectionStart = TxtBoxBig.Text.IndexOf(suchwort, endeErstesWort)
+        TxtBoxBig.SelectionLength = suchwort.Length
+
+        'MsgBox("endeErstesWort" & endeErstesWort)
+        'MsgBox("position" & position)
+
+    End Sub
+
+End Class
+' 
